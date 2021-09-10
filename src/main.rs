@@ -12,13 +12,23 @@ fn main() {
     let mut who_goes = "White";
     println!("{}", make_board(board.clone()));
     println!("Hello {} you go first, say the peice you want to move. (ex. a3)", who_goes);
-    let mut move_peice:String = read!();
-    while get_color(get_pos(move_peice), board.clone()) != who_goes {
+    let mut move_piece:String = read!();
+    while get_color(get_pos(move_piece.clone()), board.clone()) != who_goes {
         println!("uhhh I am sorry but you are {} but anyways where do you want to move your piece", who_goes.to_lowercase());
-        move_peice = read!();
+        move_piece = read!();
     }
     println!("Where do you want to move it?");
-    let move_peice:String = read!();
+    let mut move_piece_to:String = read!();
+    while !is_move_valid(move_piece.clone(), move_piece_to.clone(), board.clone()) {
+        println!("I am sorry but you cant move {} ({}) to {}, but I guess you can pick a new piece to move", board[get_pos(move_piece.clone()) as usize], move_piece.clone(), move_piece_to.clone());
+        move_piece = read!();
+        while get_color(get_pos(move_piece.clone()), board.clone()) != who_goes {
+            println!("uhhh I am sorry but you are {} but anyways where do you want to move your piece", who_goes.to_lowercase());
+            move_piece = read!();
+        }
+        println!("Where do you want to move it?");
+        move_piece_to = read!();
+    }
 }
 
 fn make_board(board:Vec<&str>) -> String {
@@ -52,7 +62,7 @@ fn get_color(pos:i32, board:Vec<&str>) -> &str {
     if vec!["♟", "♜", "♞", "♝", "♛", "♚"].contains(&board[pos as usize]) {
         return "White";
     }
-    else if vec!["♙", "♜", "♞", "♝", "♛", "♚"].contains(&board[pos as usize]) {
+    else if vec!["♙", "♖", "♘", "♗", "♕", "♔"].contains(&board[pos as usize]) {
         return "Black";
     }
     else {
