@@ -10,24 +10,48 @@ fn main() {
                                    "♟", "♟", "♟", "♟", "♟", "♟", "♟", "♟",
                                    "♜", "♞", "♝", "♛", "♚", "♝", "♞", "♜"];
     let mut who_goes = "White";
-    println!("{}", make_board(board.clone()));
-    println!("Hello {} you go first, say the peice you want to move. (ex. a3)", who_goes);
-    let mut move_piece:String = read!();
-    while get_color(get_pos(move_piece.clone()), board.clone()) != who_goes {
-        println!("uhhh I am sorry but you are {} but anyways where do you want to move your piece", who_goes.to_lowercase());
-        move_piece = read!();
-    }
-    println!("Where do you want to move it?");
-    let mut move_piece_to:String = read!();
-    while !is_move_valid(move_piece.clone(), move_piece_to.clone(), board.clone()) {
-        println!("I am sorry but you cant move {} ({}) to {}, but I guess you can pick a new piece to move", board[get_pos(move_piece.clone()) as usize], move_piece.clone(), move_piece_to.clone());
-        move_piece = read!();
+    while !checkmate(board.clone()) {
+        println!("{}", make_board(board.clone()));
+        println!("Hello {} you go first, say the peice you want to move. (ex. a3)", who_goes);
+        let mut move_piece:String = read!();
         while get_color(get_pos(move_piece.clone()), board.clone()) != who_goes {
-            println!("uhhh I am sorry but you are {} but anyways where do you want to move your piece", who_goes.to_lowercase());
+            println!("uhhh I am sorry but you are {} but I guess you can pick a new piece to move", who_goes.to_lowercase());
             move_piece = read!();
         }
         println!("Where do you want to move it?");
-        move_piece_to = read!();
+        let mut move_piece_to:String = read!();
+        while !is_move_valid(move_piece.clone(), move_piece_to.clone(), board.clone()) {
+            println!("I am sorry but you cant move {} ({}) to {}, but I guess you can pick a new piece to move", board[get_pos(move_piece.clone()) as usize], move_piece.clone(), move_piece_to.clone());
+            move_piece = read!();
+            while get_color(get_pos(move_piece.clone()), board.clone()) != who_goes {
+                println!("uhhh I am sorry but you are {} but anyways what piece do you want to move", who_goes.to_lowercase());
+                move_piece = read!();
+            }
+            println!("Where do you want to move it?");
+            move_piece_to = read!();
+        }
+        board[get_pos(move_piece_to.clone()) as usize] = board[get_pos(move_piece.clone()) as usize];
+        board[get_pos(move_piece.clone()) as usize] = " ";
+        if (board[get_pos(move_piece_to.clone()) as usize] == "♟" || board[get_pos(move_piece_to.clone()) as usize] == "♙") && [0,1,2,3,4,5,6,7,55,56,57,58,59,60,61,62,63].contains(&get_pos(move_piece_to.clone())) {
+            println!("what do you want your pond at {} to be now? (1: queen, 2: rook, 3: knight, 4: bishop) (ex. 1)", move_piece_to.clone());
+            let mut want:String = read!();
+            while !["1","2","3","4"].contains(&&*want) {
+                println!("You have to type a number between 1 and 4, what do you want your pond at {} to be now? (1: queen, 2: rook, 3: knight, 4: bishop) (ex. 1)", move_piece_to.clone());
+                want = read!();
+            }
+            if get_color(get_pos(move_piece_to.clone()), board.clone()) == "White" {
+                board[get_pos(move_piece_to.clone()) as usize] = ["♛", "♜", "♞", "♝"][want.parse::<usize>().unwrap()-1];
+            }
+            else {
+                board[get_pos(move_piece_to.clone()) as usize] = ["♕", "♖", "♘", "♗"][want.parse::<usize>().unwrap()-1];
+            }
+        }
+        if who_goes == "White" {
+            who_goes = "Black";
+        }
+        else {
+            who_goes = "White";
+        }
     }
 }
 
@@ -71,5 +95,9 @@ fn get_color(pos:i32, board:Vec<&str>) -> &str {
 }
 
 fn is_move_valid(move_from:String, move_to:String, board:Vec<&str>) -> bool {
+    return false;
+}
+
+fn checkmate(board:Vec<&str>) -> bool {
     return false;
 }
