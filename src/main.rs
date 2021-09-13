@@ -168,6 +168,26 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
 }
 
 fn checkmate(board:Vec<&str>) -> bool {
+    let mut returns = false;
+    let mut new_board = board.clone();
+    for move_from in 0..63 {
+        for move_to in 0..63 {
+            if !returns {
+                new_board = board.clone();
+                if is_move_valid(move_from, move_to, new_board.clone()) {
+                    new_board[move_to as usize] = new_board[move_from as usize];
+                    new_board[move_from as usize] = " ";
+                    if check(board.clone()) {
+                        returns = true;
+                    }
+                }
+            }
+        }
+    }
+    return returns;
+}
+
+fn check(board:Vec<&str>) -> bool {
     // I dont want to code this I am to lazy
     return false;
 }
