@@ -14,13 +14,21 @@ fn main() {
         println!("{}", make_board(board.clone()));
         println!("Hello {} you go first, say the peice you want to move. (ex. a3)", who_goes);
         let mut move_piece:String = read!();
+        while get_pos(move_piece.clone()) > 63 || get_pos(move_piece.clone()) < 0 {
+            println!("That is not a valid position it has to be the letters between a and h and the numbers between 1 and 8");
+            move_piece = read!();
+        }
         while get_color(get_pos(move_piece.clone()), board.clone()) != who_goes {
             println!("uhhh I am sorry but you are {} but I guess you can pick a new piece to move", who_goes.to_lowercase());
             move_piece = read!();
         }
         println!("Where do you want to move it?");
         let mut move_piece_to:String = read!();
-        while !is_move_valid(move_piece.clone(), move_piece_to.clone(), board.clone()) {
+        while get_pos(move_piece_to.clone()) > 63 || get_pos(move_piece_to.clone()) < 0 {
+            println!("That is not a valid position it has to be the letters between a and h and the numbers between 1 and 8");
+            move_piece_to = read!();
+        }
+        while !is_move_valid(get_pos(move_piece.clone()), get_pos(move_piece_to.clone()), board.clone()) {
             println!("I am sorry but you cant move {} ({}) to {}, but I guess you can pick a new piece to move", board[get_pos(move_piece.clone()) as usize], move_piece.clone(), move_piece_to.clone());
             move_piece = read!();
             while get_color(get_pos(move_piece.clone()), board.clone()) != who_goes {
@@ -32,11 +40,11 @@ fn main() {
         }
         board[get_pos(move_piece_to.clone()) as usize] = board[get_pos(move_piece.clone()) as usize];
         board[get_pos(move_piece.clone()) as usize] = " ";
-        if (board[get_pos(move_piece_to.clone()) as usize] == "♟" || board[get_pos(move_piece_to.clone()) as usize] == "♙") && [0,1,2,3,4,5,6,7,55,56,57,58,59,60,61,62,63].contains(&get_pos(move_piece_to.clone())) {
-            println!("what do you want your pond at {} to be now? (1: queen, 2: rook, 3: knight, 4: bishop) (ex. 1)", move_piece_to.clone());
+        if get_piece(get_pos(move_piece_to.clone()), board.clone()) == "Pawn" && [0,1,2,3,4,5,6,7,55,56,57,58,59,60,61,62,63].contains(&get_pos(move_piece_to.clone())) {
+            println!("what do you want your pawn at {} to be now? (1: queen, 2: rook, 3: knight, 4: bishop) (ex. 1)", move_piece_to.clone());
             let mut want:String = read!();
             while !["1","2","3","4"].contains(&&*want) {
-                println!("You have to type a number between 1 and 4, what do you want your pond at {} to be now? (1: queen, 2: rook, 3: knight, 4: bishop) (ex. 1)", move_piece_to.clone());
+                println!("You have to type a number between 1 and 4, what do you want your pawn at {} to be now? (1: queen, 2: rook, 3: knight, 4: bishop) (ex. 1)", move_piece_to.clone());
                 want = read!();
             }
             if get_color(get_pos(move_piece_to.clone()), board.clone()) == "White" {
@@ -83,20 +91,80 @@ fn get_pos(pos:String) -> i32 {
 }
 
 fn get_color(pos:i32, board:Vec<&str>) -> &str {
-    if vec!["♟", "♜", "♞", "♝", "♛", "♚"].contains(&board[pos as usize]) {
-        return "White";
-    }
-    else if vec!["♙", "♖", "♘", "♗", "♕", "♔"].contains(&board[pos as usize]) {
-        return "Black";
-    }
-    else {
-        return "Empty";
+    return if vec!["♟", "♜", "♞", "♝", "♛", "♚"].contains(&board[pos as usize]) {
+        "White"
+    } else if vec!["♙", "♖", "♘", "♗", "♕", "♔"].contains(&board[pos as usize]) {
+        "Black"
+    } else {
+        "Empty"
     }
 }
 
-fn is_move_valid(move_from:String, move_to:String, board:Vec<&str>) -> bool {
-    // I dont want to code this I am to lazy
-    return true;
+fn get_piece(pos:i32, board:Vec<&str>) -> &str {
+    return if vec!["♟", "♙"].contains(&board[pos as usize]) {
+        "Pawn"
+    } else if vec!["♖", "♜"].contains(&board[pos as usize]) {
+        "Rook"
+    } else if vec!["♘", "♞"].contains(&board[pos as usize]) {
+        "Knight"
+    } else if vec!["♝", "♗"].contains(&board[pos as usize]) {
+        "Bishop"
+    } else if vec!["♕", "♛"].contains(&board[pos as usize]) {
+        "Queen"
+    } else if vec!["♔", "♚"].contains(&board[pos as usize]) {
+        "King"
+    } else {
+        "Empty"
+    }
+}
+
+fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
+    match get_piece(move_from, board.clone()) {
+        "Pawn" => {
+            if get_color(move_to, board.clone()) == "Empty" {
+                if get_color(move_from, board.clone()) == "White" {
+                    if [48,49,50,51,52,53,54,55].contains(&move_from) && (move_to == move_from-8 || move_to == move_from-16) {
+                        return true;
+                    }
+                    else if move_to == move_from-8 {
+                        return true;
+                    }
+                }
+                else {
+                    if [8,9,10,11,12,13,14,15].contains(&move_from) && (move_to == move_from+8 || move_to == move_from+16) {
+                        return true;
+                    }
+                    else if move_to == move_from+8 {
+                        return true;
+                    }
+                }
+            }
+            else {
+                if get_color(move_from, board.clone()) == "White" {
+                    if move_to == move_from-7 || move_to == move_from-9 {
+                        return true;
+                    }
+                }
+                else {
+                    if move_to == move_from+7 || move_to == move_from+9 {
+                        return true;
+                    }
+                }
+            }
+        },
+        "King" => {
+            if (move_to == move_from+8 || move_to == move_from-8 || move_to == move_from-1 || move_to == move_from+1) && (get_color(move_from, board.clone()) != get_color(move_to, board.clone())) {
+                return true;
+            }
+        },
+        "Knight" => {
+            if (move_to == move_from+10 || move_to == move_from-10 || move_to == move_from-6 || move_to == move_from+6 || move_to == move_from+17 || move_to == move_from+15 || move_to == move_from-15 || move_to == move_from-17) && (get_color(move_from, board.clone()) != get_color(move_to, board.clone())) {
+                return true;
+            }
+        },
+        _ => {}
+    }
+    return false;
 }
 
 fn checkmate(board:Vec<&str>) -> bool {
