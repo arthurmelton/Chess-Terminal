@@ -10,7 +10,7 @@ fn main() {
                                    "♟", "♟", "♟", "♟", "♟", "♟", "♟", "♟",
                                    "♜", "♞", "♝", "♛", "♚", "♝", "♞", "♜"];
     let mut who_goes = "White";
-    while !checkmate(board.clone()) {
+    while !checkmate(board.clone(), who_goes) {
         println!("{}", make_board(board.clone()));
         println!("Hello {} you go first, say the peice you want to move. (ex. a3)", who_goes);
         let mut move_piece:String = read!();
@@ -167,21 +167,24 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
     return false;
 }
 
-fn checkmate(board:Vec<&str>) -> bool {
+fn checkmate(board:Vec<&str>, color:&str) -> bool {
     let mut returns = false;
     let mut new_board = board.clone();
     for move_from in 0..63 {
-        for move_to in 0..63 {
-            if !returns {
-                new_board = board.clone();
-                if is_move_valid(move_from, move_to, new_board.clone()) {
-                    new_board[move_to as usize] = new_board[move_from as usize];
-                    new_board[move_from as usize] = " ";
-                    if check(board.clone()) {
-                        returns = true;
+        if color == get_color(move_from, board.clone()) {
+            for move_to in 0..63 {
+                if !returns {
+                    new_board = board.clone();
+                    if is_move_valid(move_from, move_to, new_board.clone()) {
+                        new_board[move_to as usize] = new_board[move_from as usize];
+                        new_board[move_from as usize] = " ";
+                        if check(board.clone()) {
+                            returns = true;
+                        }
+                        new_board = board.clone();
                     }
                 }
-            }
+            } 
         }
     }
     return returns;
