@@ -123,7 +123,7 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
         "Pawn" => {
             if get_color(move_to, board.clone()) == "Empty" {
                 if get_color(move_from, board.clone()) == "White" {
-                    if [48,49,50,51,52,53,54,55].contains(&move_from) && (move_to == move_from-8 || move_to == move_from-16) {
+                    if [48,49,50,51,52,53,54,55].contains(&move_from) && (move_to == move_from-8 || (move_to == move_from-16 && get_color(move_from-8, board) == "Empty")) {
                         return true;
                     }
                     else if move_to == move_from-8 {
@@ -131,7 +131,7 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
                     }
                 }
                 else {
-                    if [8,9,10,11,12,13,14,15].contains(&move_from) && (move_to == move_from+8 || move_to == move_from+16) {
+                    if [8,9,10,11,12,13,14,15].contains(&move_from) && (move_to == move_from+8 || (move_to == move_from+16 && get_color(move_from+8, board) == "Empty")) {
                         return true;
                     }
                     else if move_to == move_from+8 {
@@ -139,7 +139,7 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
                     }
                 }
             }
-            else {
+            else if get_color(move_from, board.clone()) != get_color(move_to, board.clone()) {
                 if get_color(move_from, board.clone()) == "White" {
                     if move_to == move_from-7 || move_to == move_from-9 {
                         return true;
