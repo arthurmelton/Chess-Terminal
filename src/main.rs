@@ -169,34 +169,27 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
                 poses.push(pos);
                 pos -= 1;
             }
-            pos -= 1;
             if pos >= 0 && pos < 64 && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
-            pos = move_from + 1;
             while pos >= 0 && pos < 64 && (pos+1) % 8 != 0 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos += 1;
             }
-            pos += 1;
             if pos >= 0 && pos < 64 && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
-            pos = move_from + 8;
-            while pos < 64 && get_color(pos, board.clone()) == "Empty" {
+            while pos >= 0 && pos < 64 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos += 8;
             }
-            pos += 8;
             if pos >= 0 && pos < 64 && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
-            pos = move_from - 8;
             while pos >= 0 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos -= 8;
             }
-            pos -= 8;
             if pos >= 0 && pos < 64 && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
@@ -211,70 +204,55 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
                 poses.push(pos);
                 pos -= 7;
             }
-            pos -= 7;
             if pos >= 0 && pos < 64 && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
-            pos = move_from + 7;
             while pos >= 0 && pos < 64 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos += 7;
             }
-            pos -= 7;
             if pos >= 0 && pos < 64 && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
-            pos = move_from + 9;
             while pos >= 0 && pos < 64 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos += 9;
             }
-            pos += 9;
             if pos >= 0 && pos < 64 && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
-            pos = move_from - 9;
             while pos >= 0 && pos < 64 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos -= 9;
             }
-            pos -= 9;
             if pos >= 0 && pos < 64 && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
-            pos = move_from - 1;
             while pos >= 0 && pos < 64 && (pos % 8) != 0 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos -= 1;
             }
-            pos -= 1;
             if pos >= 0 && pos < 64 && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
-            pos = move_from + 1;
             while pos >= 0 && pos < 64 && (pos+1) % 8 != 0 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos += 1;
             }
-            pos += 1;
             if pos >= 0 && pos < 64 && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
-            pos = move_from + 8;
-            while pos < 64 && get_color(pos, board.clone()) == "Empty" {
+            while pos >= 0 && pos < 64 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos += 8;
             }
-            pos += 8;
             if pos >= 0 && pos < 64 && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
-            pos = move_from - 8;
             while pos >= 0 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos -= 8;
             }
-            pos -= 8;
             if pos >= 0 && pos < 64 && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
@@ -289,70 +267,55 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
                 poses.push(pos);
                 pos -= 7;
             }
-            pos -= 7;
             if pos >= 0 && pos < 64 && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
-            pos = move_from + 7;
             while pos >= 0 && pos < 64 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos += 7;
             }
-            pos -= 7;
             if pos >= 0 && pos < 64 && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
-            pos = move_from + 9;
             while pos >= 0 && pos < 64 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos += 9;
             }
-            pos += 9;
             if pos >= 0 && pos < 64 && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
-            pos = move_from - 9;
             while pos >= 0 && pos < 64 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos -= 9;
             }
-            pos -= 9;
             if pos >= 0 && pos < 64 && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
-            pos = move_from - 1;
             while pos >= 0 && pos < 64 && (pos % 8) != 0 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos -= 1;
             }
-            pos -= 1;
             if pos >= 0 && pos < 64 && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
-            pos = move_from + 1;
             while pos >= 0 && pos < 64 && (pos+1) % 8 != 0 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos += 1;
             }
-            pos += 1;
             if pos >= 0 && pos < 64 && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
-            pos = move_from + 8;
-            while pos < 64 && get_color(pos, board.clone()) == "Empty" {
+            while pos >= 0 && pos < 64 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos += 8;
             }
-            pos += 8;
             if pos >= 0 && pos < 64 && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
-            pos = move_from - 8;
             while pos >= 0 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos -= 8;
             }
-            pos -= 8;
             if pos >= 0 && pos < 64 && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
@@ -361,34 +324,27 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
                 poses.push(pos);
                 pos -= 1;
             }
-            pos -= 1;
             if pos >= 0 && pos < 64 && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
-            pos = move_from + 1;
             while pos >= 0 && pos < 64 && (pos+1) % 8 != 0 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos += 1;
             }
-            pos += 1;
             if pos >= 0 && pos < 64 && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
-            pos = move_from + 8;
-            while pos < 64 && get_color(pos, board.clone()) == "Empty" {
+            while pos >= 0 && pos < 64 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos += 8;
             }
-            pos += 8;
             if pos >= 0 && pos < 64 && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
-            pos = move_from - 8;
             while pos >= 0 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos -= 8;
             }
-            pos -= 8;
             if pos >= 0 && pos < 64 && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
@@ -412,6 +368,7 @@ fn checkmate(board:Vec<&str>, color:&str) -> bool {
                     if is_move_valid(move_from, move_to, new_board.clone()) {
                         new_board[move_to as usize] = new_board[move_from as usize];
                         new_board[move_from as usize] = " ";
+                        println!("{}", make_board(new_board));
                         if check(board.clone()) {
                             returns = true;
                         }
