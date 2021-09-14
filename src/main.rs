@@ -119,28 +119,46 @@ fn get_piece(pos:i32, board:Vec<&str>) -> &str {
 }
 
 fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
-    let mut new_board = board.clone();
-    new_board[move_to as usize] = new_board[move_from as usize];
-    new_board[move_from as usize] = " ";
-    if check(new_board).contains(&get_color(move_from, board.clone())) {
-        return false;
-    }
     match get_piece(move_from, board.clone()) {
         "Pawn" => {
             if get_color(move_to, board.clone()) == "Empty" {
                 if get_color(move_from, board.clone()) == "White" {
-                    if [48,49,50,51,52,53,54,55].contains(&move_from) && (move_to == move_from-8 || (move_to == move_from-16 && get_color(move_from-8, board) == "Empty")) {
+                    if [48,49,50,51,52,53,54,55].contains(&move_from) && (move_to == move_from-8 || (move_to == move_from-16 && get_color(move_from-8, board.clone()) == "Empty")) {
+                        let mut new_board = board.clone();
+                        new_board[move_to as usize] = new_board[move_from as usize];
+                        new_board[move_from as usize] = " ";
+                        if check(new_board).contains(&get_color(move_from, board.clone())) {
+                            return false;
+                        }
                         return true;
                     }
                     else if move_to == move_from-8 {
+                        let mut new_board = board.clone();
+                        new_board[move_to as usize] = new_board[move_from as usize];
+                        new_board[move_from as usize] = " ";
+                        if check(new_board).contains(&get_color(move_from, board.clone())) {
+                            return false;
+                        }
                         return true;
                     }
                 }
                 else {
-                    if [8,9,10,11,12,13,14,15].contains(&move_from) && (move_to == move_from+8 || (move_to == move_from+16 && get_color(move_from+8, board) == "Empty")) {
+                    if [8,9,10,11,12,13,14,15].contains(&move_from) && (move_to == move_from+8 || (move_to == move_from+16 && get_color(move_from+8, board.clone()) == "Empty")) {
+                        let mut new_board = board.clone();
+                        new_board[move_to as usize] = new_board[move_from as usize];
+                        new_board[move_from as usize] = " ";
+                        if check(new_board).contains(&get_color(move_from, board.clone())) {
+                            return false;
+                        }
                         return true;
                     }
                     else if move_to == move_from+8 {
+                        let mut new_board = board.clone();
+                        new_board[move_to as usize] = new_board[move_from as usize];
+                        new_board[move_from as usize] = " ";
+                        if check(new_board).contains(&get_color(move_from, board.clone())) {
+                            return false;
+                        }
                         return true;
                     }
                 }
@@ -148,11 +166,23 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
             else if get_color(move_from, board.clone()) != get_color(move_to, board.clone()) {
                 if get_color(move_from, board.clone()) == "White" {
                     if move_to == move_from-7 || move_to == move_from-9 {
+                        let mut new_board = board.clone();
+                        new_board[move_to as usize] = new_board[move_from as usize];
+                        new_board[move_from as usize] = " ";
+                        if check(new_board).contains(&get_color(move_from, board.clone())) {
+                            return false;
+                        }
                         return true;
                     }
                 }
                 else {
                     if move_to == move_from+7 || move_to == move_from+9 {
+                        let mut new_board = board.clone();
+                        new_board[move_to as usize] = new_board[move_from as usize];
+                        new_board[move_from as usize] = " ";
+                        if check(new_board).contains(&get_color(move_from, board.clone())) {
+                            return false;
+                        }
                         return true;
                     }
                 }
@@ -160,6 +190,12 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
         },
         "King" => {
             if (move_to == move_from+8 || move_to == move_from-8 || move_to == move_from-1 || move_to == move_from+1) && (get_color(move_from, board.clone()) != get_color(move_to, board.clone())) {
+                let mut new_board = board.clone();
+                new_board[move_to as usize] = new_board[move_from as usize];
+                new_board[move_from as usize] = " ";
+                if check(new_board).contains(&get_color(move_from, board.clone())) {
+                    return false;
+                }
                 return true;
             }
         },
@@ -190,6 +226,12 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
                 poses.push(move_from-17);
             }
             if poses.contains(&move_to) && (get_color(move_from, board.clone()) != get_color(move_to, board.clone())) {
+                let mut new_board = board.clone();
+                new_board[move_to as usize] = new_board[move_from as usize];
+                new_board[move_from as usize] = " ";
+                if check(new_board).contains(&get_color(move_from, board.clone())) {
+                    return false;
+                }
                 return true;
             }
         },
@@ -225,6 +267,12 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
                 poses.push(pos);
             }
             if poses.contains(&move_to) && (get_color(move_from, board.clone()) != get_color(move_to, board.clone())) {
+                let mut new_board = board.clone();
+                new_board[move_to as usize] = new_board[move_from as usize];
+                new_board[move_from as usize] = " ";
+                if check(new_board).contains(&get_color(move_from, board.clone())) {
+                    return false;
+                }
                 return true;
             }
         },
@@ -288,6 +336,12 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
                 poses.push(pos);
             }
             if poses.contains(&move_to) && (get_color(move_from, board.clone()) != get_color(move_to, board.clone())) {
+                let mut new_board = board.clone();
+                new_board[move_to as usize] = new_board[move_from as usize];
+                new_board[move_from as usize] = " ";
+                if check(new_board).contains(&get_color(move_from, board.clone())) {
+                    return false;
+                }
                 return true;
             }
         },
@@ -380,6 +434,12 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
                 poses.push(pos);
             }
             if poses.contains(&move_to) && (get_color(move_from, board.clone()) != get_color(move_to, board.clone())) {
+                let mut new_board = board.clone();
+                new_board[move_to as usize] = new_board[move_from as usize];
+                new_board[move_from as usize] = " ";
+                if check(new_board).contains(&get_color(move_from, board.clone())) {
+                    return false;
+                }
                 return true;
             }
         },
@@ -389,28 +449,16 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
 }
 
 fn checkmate(board:Vec<&str>, color:&str) -> bool {
-    let mut returns = false;
-    let mut new_board = board.clone();
     for move_from in 0..63 {
         if color == get_color(move_from, board.clone()) {
             for move_to in 0..63 {
-                println!("move_from: {}, move_to: {}", move_from, move_to);
-                if !returns {
-                    new_board = board.clone();
-                    if is_move_valid(move_from, move_to, new_board.clone()) {
-                        new_board[move_to as usize] = new_board[move_from as usize];
-                        new_board[move_from as usize] = " ";
-                        println!("{}", make_board(new_board));
-                        if check(board.clone()).contains(&color) {
-                            returns = true;
-                        }
-                        new_board = board.clone();
-                    }
+                if is_move_valid(move_from, move_to, board.clone()) {
+                    return false;
                 }
             } 
         }
     }
-    return returns;
+    return true;
 }
 
 fn check(board:Vec<&str>) -> Vec<&str> {
