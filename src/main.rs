@@ -158,7 +158,32 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
             }
         },
         "Knight" => {
-            if (move_to == move_from+10 || move_to == move_from-10 || move_to == move_from-6 || move_to == move_from+6 || move_to == move_from+17 || move_to == move_from+15 || move_to == move_from-15 || move_to == move_from-17) && (get_color(move_from, board.clone()) != get_color(move_to, board.clone())) {
+            let mut poses = Vec::new();
+            if (((move_from+10) as f32) / 8  as f32).floor() == (move_from as f32 / 8  as f32).floor() + 1 as f32 {
+                poses.push(move_from+10);
+            }
+            if (((move_from-10) as f32) / 8  as f32).floor() == (move_from as f32 / 8  as f32).floor() - 1 as f32 {
+                poses.push(move_from-10);
+            }
+            if (((move_from-6) as f32) / 8  as f32).floor() == (move_from as f32 / 8  as f32).floor() - 1 as f32 {
+                poses.push(move_from-6);
+            }
+            if (((move_from+6) as f32) / 8  as f32).floor() == (move_from as f32 / 8  as f32).floor() + 1 as f32 {
+                poses.push(move_from+6);
+            }
+            if (((move_from+17) as f32) / 8  as f32).floor() == (move_from as f32 / 8  as f32).floor() + 2 as f32 {
+                poses.push(move_from+17);
+            }
+            if (((move_from+15) as f32) / 8  as f32).floor() == (move_from as f32 / 8  as f32).floor() + 2 as f32 {
+                poses.push(move_from+15);
+            }
+            if (((move_from-15) as f32) / 8  as f32).floor() == (move_from as f32 / 8  as f32).floor() - 2 as f32 {
+                poses.push(move_from-15);
+            }
+            if (((move_from-17) as f32) / 8  as f32).floor() == (move_from as f32 / 8  as f32).floor() - 2 as f32 {
+                poses.push(move_from-17);
+            }
+            if poses.contains(&move_to) && (get_color(move_from, board.clone()) != get_color(move_to, board.clone())) {
                 return true;
             }
         },
