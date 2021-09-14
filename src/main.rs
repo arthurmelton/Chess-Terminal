@@ -119,6 +119,12 @@ fn get_piece(pos:i32, board:Vec<&str>) -> &str {
 }
 
 fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
+    let mut new_board = board.clone();
+    new_board[move_to as usize] = new_board[move_from as usize];
+    new_board[move_from as usize] = " ";
+    if check(new_board).contains(&get_color(move_from, board.clone())) {
+        return false;
+    }
     match get_piece(move_from, board.clone()) {
         "Pawn" => {
             if get_color(move_to, board.clone()) == "Empty" {
@@ -388,13 +394,14 @@ fn checkmate(board:Vec<&str>, color:&str) -> bool {
     for move_from in 0..63 {
         if color == get_color(move_from, board.clone()) {
             for move_to in 0..63 {
+                println!("move_from: {}, move_to: {}", move_from, move_to);
                 if !returns {
                     new_board = board.clone();
                     if is_move_valid(move_from, move_to, new_board.clone()) {
                         new_board[move_to as usize] = new_board[move_from as usize];
                         new_board[move_from as usize] = " ";
                         println!("{}", make_board(new_board));
-                        if check(board.clone()) {
+                        if check(board.clone()).contains(&color) {
                             returns = true;
                         }
                         new_board = board.clone();
@@ -406,7 +413,16 @@ fn checkmate(board:Vec<&str>, color:&str) -> bool {
     return returns;
 }
 
-fn check(board:Vec<&str>) -> bool {
-    // I dont want to code this I am to lazy
-    return false;
+fn check(board:Vec<&str>) -> Vec<&str> {
+    let mut returns = Vec::new();
+    for find_king in 0..63 {
+        if get_piece(find_king, board.clone()) == "King" {
+            for get_all_peices in 0..63 {
+                if is_move_valid(get_all_peices, find_king, board.clone()) {
+                    returns.push(get_color(find_king, board.clone()));
+                }
+            }
+        }
+    }
+    returns
 }
