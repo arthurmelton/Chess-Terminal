@@ -465,8 +465,8 @@ fn check(board:Vec<&str>) -> Vec<&str> {
     let mut returns = Vec::new();
     for find_king in 0..63 {
         if get_piece(find_king, board.clone()) == "King" {
-            for get_all_peices in 0..63 {
-                if is_move_valid(get_all_peices, find_king, board.clone()) {
+            for get_all_pieces in 0..63 {
+                if is_move_valid(get_all_pieces, find_king, board.clone()) {
                     returns.push(get_color(find_king, board.clone()));
                 }
             }
