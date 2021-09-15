@@ -172,7 +172,7 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
             }
             else if get_color(move_from, board.clone()) != get_color(move_to, board.clone()) {
                 if get_color(move_from, board.clone()) == "White" {
-                    if move_to == move_from-7 || move_to == move_from-9 {
+                    if (move_to == move_from-7 && (move_from as f32 / 8 as f32).floor() == (move_to as f32 / 8 as f32).floor() + 1 as f32) || (move_to == move_from-9 && (move_from as f32 / 8 as f32).floor() == (move_to as f32 / 8 as f32).floor() + 1 as f32) {
                         let mut new_board = board.clone();
                         new_board[move_to as usize] = new_board[move_from as usize];
                         new_board[move_from as usize] = " ";
@@ -183,7 +183,7 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
                     }
                 }
                 else {
-                    if move_to == move_from+7 || move_to == move_from+9 {
+                    if (move_to == move_from+7 && (move_from as f32 / 8 as f32).floor() == (move_to as f32 / 8 as f32).floor() - 1 as f32 ) || (move_to == move_from+9 && (move_from as f32 / 8 as f32).floor() == (move_to as f32 / 8 as f32).floor() - 1 as f32) {
                         let mut new_board = board.clone();
                         new_board[move_to as usize] = new_board[move_from as usize];
                         new_board[move_from as usize] = " ";
@@ -245,11 +245,11 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
         "Rook" => {
             let mut poses = Vec::new();
             let mut pos = move_from +1;
-            while pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos+1) as f32 / 8 as f32).floor() && (pos+1) % 8 != 0 && get_color(pos, board.clone()) == "Empty" {
+            while pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos-1) as f32 / 8 as f32).floor() && (pos+1) % 8 != 0 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos += 1;
             }
-            if pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos+1) as f32 / 8 as f32).floor()  && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
+            if pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos-1) as f32 / 8 as f32).floor()  && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
             let mut pos = move_from + 8;
@@ -269,11 +269,11 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
                 poses.push(pos);
             }
             let mut pos = move_from - 1;
-            while pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos-1) as f32 / 8 as f32).floor() && (pos % 8) != 0 && get_color(pos, board.clone()) == "Empty" {
+            while pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos+1) as f32 / 8 as f32).floor() && (pos % 8) != 0 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos -= 1;
             }
-            if pos >= 0 && pos < 64 && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
+            if pos >= 0 && pos < 64  && (pos as f32 / 8 as f32).floor() == ((pos+1) as f32 / 8 as f32).floor() && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
             if poses.contains(&move_to) && (get_color(move_from, board.clone()) != get_color(move_to, board.clone())) {
@@ -289,27 +289,27 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
         "Bishop" => {
             let mut poses = Vec::new();
             let mut pos = move_from - 7;
-            while pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos-7) as f32 / 8 as f32).floor() + 1 as f32 && get_color(pos, board.clone()) == "Empty" {
+            while pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos+7) as f32 / 8 as f32).floor() - 1 as f32 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos -= 7;
-            }
-            if pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos-7) as f32 / 8 as f32).floor() + 1 as f32  && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
-                poses.push(pos);
-            }
-            let mut pos = move_from + 7;
-            while pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos+7) as f32 / 8 as f32).floor() - 1 as f32  && get_color(pos, board.clone()) == "Empty" {
-                poses.push(pos);
-                pos += 7;
             }
             if pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos+7) as f32 / 8 as f32).floor() - 1 as f32  && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
+            let mut pos = move_from + 7;
+            while pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos-7) as f32 / 8 as f32).floor() + 1 as f32  && get_color(pos, board.clone()) == "Empty" {
+                poses.push(pos);
+                pos += 7;
+            }
+            if pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos-7) as f32 / 8 as f32).floor() + 1 as f32  && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
+                poses.push(pos);
+            }
             let mut pos = move_from + 9;
-            while pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos+9) as f32 / 8 as f32).floor() - 1 as f32  && get_color(pos, board.clone()) == "Empty" {
+            while pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos-9) as f32 / 8 as f32).floor() + 1 as f32  && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos += 9;
             }
-            if pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos+9) as f32 / 8 as f32).floor() - 1 as f32 &&  get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
+            if pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos-9) as f32 / 8 as f32).floor() + 1 as f32 &&  get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
             let mut pos = move_from - 9;
@@ -317,7 +317,7 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
                 poses.push(pos);
                 pos -= 9;
             }
-            if pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos-9) as f32 / 8 as f32).floor() + 1 as f32  && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
+            if pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos+9) as f32 / 8 as f32).floor() - 1 as f32  && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
             if poses.contains(&move_to) && (get_color(move_from, board.clone()) != get_color(move_to, board.clone())) {
@@ -333,43 +333,43 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
         "Queen" => {
             let mut poses = Vec::new();
             let mut pos = move_from - 7;
-            while pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos-7) as f32 / 8 as f32).floor() + 1 as f32 && get_color(pos, board.clone()) == "Empty" {
+            while pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos+7) as f32 / 8 as f32).floor() - 1 as f32 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos -= 7;
-            }
-            if pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos-7) as f32 / 8 as f32).floor() + 1 as f32  && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
-                poses.push(pos);
-            }
-            let mut pos = move_from + 7;
-            while pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos+7) as f32 / 8 as f32).floor() - 1 as f32  && get_color(pos, board.clone()) == "Empty" {
-                poses.push(pos);
-                pos += 7;
             }
             if pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos+7) as f32 / 8 as f32).floor() - 1 as f32  && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
+            let mut pos = move_from + 7;
+            while pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos-7) as f32 / 8 as f32).floor() + 1 as f32  && get_color(pos, board.clone()) == "Empty" {
+                poses.push(pos);
+                pos += 7;
+            }
+            if pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos-7) as f32 / 8 as f32).floor() + 1 as f32  && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
+                poses.push(pos);
+            }
             let mut pos = move_from + 9;
-            while pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos+9) as f32 / 8 as f32).floor() - 1 as f32 && get_color(pos, board.clone()) == "Empty" {
+            while pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos-9) as f32 / 8 as f32).floor() + 1 as f32 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos += 9;
             }
-            if pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos+9) as f32 / 8 as f32).floor() - 1 as f32 &&  get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
+            if pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos-9) as f32 / 8 as f32).floor() + 1 as f32 &&  get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
             let mut pos = move_from - 9;
-            while pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos-9) as f32 / 8 as f32).floor() + 1 as f32  && get_color(pos, board.clone()) == "Empty" {
+            while pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos+9) as f32 / 8 as f32).floor() - 1 as f32  && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos -= 9;
             }
-            if pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos-9) as f32 / 8 as f32).floor() + 1 as f32  && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
+            if pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos+9) as f32 / 8 as f32).floor() - 1 as f32  && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
             let mut pos = move_from +1;
-            while pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos+1) as f32 / 8 as f32).floor() && (pos+1) % 8 != 0 && get_color(pos, board.clone()) == "Empty" {
+            while pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos-1) as f32 / 8 as f32).floor() && (pos+1) % 8 != 0 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos += 1;
             }
-            if pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos+1) as f32 / 8 as f32).floor()  && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
+            if pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos-1) as f32 / 8 as f32).floor()  && get_color(pos, board.clone()) != get_color(move_from, board.clone()) {
                 poses.push(pos);
             }
             let mut pos = move_from + 8;
@@ -389,7 +389,7 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>) -> bool {
                 poses.push(pos);
             }
             let mut pos = move_from - 1;
-            while pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos-1) as f32 / 8 as f32).floor() && (pos % 8) != 0 && get_color(pos, board.clone()) == "Empty" {
+            while pos >= 0 && pos < 64 && (pos as f32 / 8 as f32).floor() == ((pos+1) as f32 / 8 as f32).floor() && (pos % 8) != 0 && get_color(pos, board.clone()) == "Empty" {
                 poses.push(pos);
                 pos -= 1;
             }
