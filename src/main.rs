@@ -14,7 +14,6 @@ fn main() {
     let mut has_move:Vec<bool> = vec![false, false, false, false, false, false];
     while !checkmate(board.clone(), who_goes, can_castle.clone()) {
     	can_castle = Vec::new();
-        println!("!has_move[5]: {}, !has_move[0]: {}, get_piece(1, board.clone()): {},  get_piece(2, board.clone()): {},  get_piece(3, board.clone()): {}, ", !has_move[5], !has_move[0], get_piece(1, board.clone()) == "Empty", get_piece(2, board.clone()) == "Empty", get_piece(3, board.clone()) == "Empty");
         if !has_move[4] && !has_move[0] && get_piece(1, board.clone()) == "Empty" && get_piece(2, board.clone()) == "Empty" && get_piece(3, board.clone()) == "Empty" {
             can_castle.push(2);
         }
@@ -27,7 +26,6 @@ fn main() {
         if !has_move[5] && !has_move[3] && get_piece(61, board.clone()) == "Empty" && get_piece(62, board.clone()) == "Empty" {
             can_castle.push(62);
         }
-        println!("{:?}", can_castle.clone());
         println!("{}", make_board(board.clone()));
         println!("Hello {} you go first, say the peice you want to move. (ex. a3)", who_goes);
         let mut move_piece:String = read!();
@@ -55,7 +53,6 @@ fn main() {
             println!("Where do you want to move it?");
             move_piece_to = read!();
         }
-        println!("{:?}", can_castle.clone());
         board = move_piece_fn(get_pos(move_piece_to.clone()), get_pos(move_piece.clone()), board.clone(), can_castle.clone());
         if get_piece(get_pos(move_piece_to.clone()), board.clone()) == "Pawn" && [0,1,2,3,4,5,6,7,55,56,57,58,59,60,61,62,63].contains(&get_pos(move_piece_to.clone())) {
             println!("what do you want your pawn at {} to be now? (1: queen, 2: rook, 3: knight, 4: bishop) (ex. 1)", move_piece_to.clone());
@@ -235,9 +232,6 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>, can_castle:Vec<i32
         },
         "King" => {
             if ((move_to == move_from+8 || move_to == move_from-8 || move_to == move_from-1 || move_to == move_from+1) && (get_color(move_from, board.clone()) != get_color(move_to, board.clone()))) || (get_color(move_from, board.clone()) == "White" && (move_to == 58 || move_to == 62) && can_castle.contains(&move_to)) || (get_color(move_from, board.clone()) == "Black" && (move_to == 2 || move_to == 6) && can_castle.contains(&move_to)) {
-                println!("move_from: {}", move_from);
-                println!("move_to: {}", move_to);
-                println!("check : {:?}", check(move_piece_fn(move_to, move_from, board.clone(), can_castle.clone()), can_castle.clone()));
                 if check(move_piece_fn(move_to, move_from, board.clone(), can_castle.clone()), can_castle.clone()).contains(&get_color(move_from, board.clone())) {
                     return false;
                 }
