@@ -29,24 +29,24 @@ fn main() {
         println!("{}", make_board(board.clone()));
         println!("Hello {} you go first, say the peice you want to move. (ex. a3)", who_goes);
         let mut move_piece:String = read!();
-        while get_pos(move_piece.clone()) > 63 || get_pos(move_piece.clone()) < 0 {
+        while !move_piece.chars().nth(0).ok_or(0).is_ok() || !move_piece.chars().nth(1).ok_or(0).is_ok() || get_pos(move_piece.clone()) > 63 || get_pos(move_piece.clone()) < 0 {
             println!("That is not a valid position it has to be the letters between a and h and the numbers between 1 and 8");
             move_piece = read!();
         }
-        while get_color(get_pos(move_piece.clone()), board.clone()) != who_goes {
+        while !move_piece.chars().nth(0).ok_or(0).is_ok() || !move_piece.chars().nth(1).ok_or(0).is_ok() ||get_color(get_pos(move_piece.clone()), board.clone()) != who_goes {
             println!("uhhh I am sorry but you are {} but I guess you can pick a new piece to move", who_goes.to_lowercase());
             move_piece = read!();
         }
         println!("Where do you want to move it?");
         let mut move_piece_to:String = read!();
-        while get_pos(move_piece_to.clone()) > 63 || get_pos(move_piece_to.clone()) < 0 {
+        while !move_piece_to.chars().nth(0).ok_or(0).is_ok() || !move_piece_to.chars().nth(1).ok_or(0).is_ok() || get_pos(move_piece_to.clone()) > 63 || get_pos(move_piece_to.clone()) < 0 {
             println!("That is not a valid position it has to be the letters between a and h and the numbers between 1 and 8");
             move_piece_to = read!();
         }
-        while !is_move_valid(get_pos(move_piece.clone()), get_pos(move_piece_to.clone()), board.clone(), can_castle.clone()) {
+        while !move_piece_to.chars().nth(0).ok_or(0).is_ok() || !move_piece_to.chars().nth(1).ok_or(0).is_ok() || !move_piece.chars().nth(0).ok_or(0).is_ok() || !move_piece.chars().nth(1).ok_or(0).is_ok() || !is_move_valid(get_pos(move_piece.clone()), get_pos(move_piece_to.clone()), board.clone(), can_castle.clone()) {
             println!("I am sorry but you cant move {} ({}) to {}, but I guess you can pick a new piece to move", board[get_pos(move_piece.clone()) as usize], move_piece.clone(), move_piece_to.clone());
             move_piece = read!();
-            while get_color(get_pos(move_piece.clone()), board.clone()) != who_goes {
+            while !move_piece.chars().nth(0).ok_or(0).is_ok() || !move_piece.chars().nth(1).ok_or(0).is_ok() ||get_color(get_pos(move_piece.clone()), board.clone()) != who_goes {
                 println!("uhhh I am sorry but you are {} but anyways what piece do you want to move", who_goes.to_lowercase());
                 move_piece = read!();
             }
@@ -129,7 +129,7 @@ fn make_board(board:Vec<&str>) -> String {
 fn get_pos(pos:String) -> i32 {
     let letter = pos.chars().nth(0).unwrap();
     let number = pos.chars().nth(1).unwrap();
-    return ((8-(number.to_string()).parse::<i32>().unwrap())*8)+((char::to_digit(letter, 18).unwrap()-10) as i32)
+    return ((8 - (number.to_string()).parse::<i32>().unwrap()) * 8) + ((char::to_digit(letter, 18).unwrap() - 10) as i32)
 }
 
 fn get_color(pos:i32, board:Vec<&str>) -> &str {
