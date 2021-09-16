@@ -11,7 +11,23 @@ fn main() {
                                    "♜", "♞", "♝", "♛", "♚", "♝", "♞", "♜"];
     let mut who_goes = "White";
     let mut can_castle:Vec<i32> = Vec::new();
+    let mut has_move:Vec<bool> = vec![false, false, false, false, false, false];
     while !checkmate(board.clone(), who_goes, can_castle.clone()) {
+    	can_castle = Vec::new();
+        println!("!has_move[5]: {}, !has_move[0]: {}, get_piece(1, board.clone()): {},  get_piece(2, board.clone()): {},  get_piece(3, board.clone()): {}, ", !has_move[5], !has_move[0], get_piece(1, board.clone()) == "Empty", get_piece(2, board.clone()) == "Empty", get_piece(3, board.clone()) == "Empty");
+        if !has_move[4] && !has_move[0] && get_piece(1, board.clone()) == "Empty" && get_piece(2, board.clone()) == "Empty" && get_piece(3, board.clone()) == "Empty" {
+            can_castle.push(2);
+        }
+        if !has_move[4] && !has_move[1] && get_piece(5, board.clone()) == "Empty" && get_piece(6, board.clone()) == "Empty" {
+            can_castle.push(6);
+        }
+        if !has_move[5] && !has_move[2] && get_piece(57, board.clone()) == "Empty" && get_piece(58, board.clone()) == "Empty" && get_piece(59, board.clone()) == "Empty" {
+            can_castle.push(58);
+        }
+        if !has_move[5] && !has_move[3] && get_piece(61, board.clone()) == "Empty" && get_piece(62, board.clone()) == "Empty" {
+            can_castle.push(62);
+        }
+        println!("{:?}", can_castle.clone());
         println!("{}", make_board(board.clone()));
         println!("Hello {} you go first, say the peice you want to move. (ex. a3)", who_goes);
         let mut move_piece:String = read!();
@@ -39,7 +55,8 @@ fn main() {
             println!("Where do you want to move it?");
             move_piece_to = read!();
         }
-        board = move_piece_fn(get_pos(move_piece_to), get_pos(move_piece), board.clone(), can_castle.clone());
+        println!("{:?}", can_castle.clone());
+        board = move_piece_fn(get_pos(move_piece_to.clone()), get_pos(move_piece.clone()), board.clone(), can_castle.clone());
         if get_piece(get_pos(move_piece_to.clone()), board.clone()) == "Pawn" && [0,1,2,3,4,5,6,7,55,56,57,58,59,60,61,62,63].contains(&get_pos(move_piece_to.clone())) {
             println!("what do you want your pawn at {} to be now? (1: queen, 2: rook, 3: knight, 4: bishop) (ex. 1)", move_piece_to.clone());
             let mut want:String = read!();
@@ -53,6 +70,27 @@ fn main() {
             else {
                 board[get_pos(move_piece_to.clone()) as usize] = ["♕", "♖", "♘", "♗"][want.parse::<usize>().unwrap()-1];
             }
+        }
+        match get_pos(move_piece.clone()) {
+            0 => {
+                has_move[0] = true;
+            },
+            7 => {
+                has_move[1] = true;
+            },
+            56 => {
+                has_move[2] = true;
+            },
+            63 => {
+                has_move[3] = true;
+            },
+            4 => {
+                has_move[4] = true;
+            },
+            60 => {
+                has_move[5] = true;
+            }
+            _ => {}
         }
         if who_goes == "White" {
             who_goes = "Black";
@@ -196,7 +234,10 @@ fn is_move_valid(move_from:i32, move_to:i32, board:Vec<&str>, can_castle:Vec<i32
             }
         },
         "King" => {
-            if (move_to == move_from+8 || move_to == move_from-8 || move_to == move_from-1 || move_to == move_from+1) && (get_color(move_from, board.clone()) != get_color(move_to, board.clone())) {
+            if ((move_to == move_from+8 || move_to == move_from-8 || move_to == move_from-1 || move_to == move_from+1) && (get_color(move_from, board.clone()) != get_color(move_to, board.clone()))) || (get_color(move_from, board.clone()) == "White" && (move_to == 58 || move_to == 62) && can_castle.contains(&move_to)) || (get_color(move_from, board.clone()) == "Black" && (move_to == 2 || move_to == 6) && can_castle.contains(&move_to)) {
+                println!("move_from: {}", move_from);
+                println!("move_to: {}", move_to);
+                println!("check : {:?}", check(move_piece_fn(move_to, move_from, board.clone(), can_castle.clone()), can_castle.clone()));
                 if check(move_piece_fn(move_to, move_from, board.clone(), can_castle.clone()), can_castle.clone()).contains(&get_color(move_from, board.clone())) {
                     return false;
                 }
@@ -426,7 +467,7 @@ fn check(board:Vec<&str>, can_castle:Vec<i32>) -> Vec<&str> {
     for find_king in 0..63 {
         if get_piece(find_king, board.clone()) == "King" {
             for get_all_pieces in 0..63 {
-                if is_move_valid(get_all_pieces, find_king, board.clone(), can_castle.clone()) {
+                if get_color(find_king, board.clone()) != get_color(get_all_pieces, board.clone()) && is_move_valid(get_all_pieces, find_king, board.clone(), can_castle.clone()) {
                     returns.push(get_color(find_king, board.clone()));
                 }
             }
@@ -438,22 +479,22 @@ fn check(board:Vec<&str>, can_castle:Vec<i32>) -> Vec<&str> {
 fn move_piece_fn(move_to:i32, move_from:i32, board:Vec<&str>, can_castle:Vec<i32>) -> Vec<&str> {
     if get_piece(move_from, board.clone()) == "King" && ((get_color(move_from, board.clone()) == "Black" && move_from == 4 && can_castle.contains(&move_to)) || (get_color(move_from, board.clone()) == "White" && move_from == 60 && can_castle.contains(&move_to))) {
         let mut new_board = board.clone();
-        if move_to % 8 == 1 {
-            new_board[move_to+1] = new_board[move_to-1];
-            new_board[move_to-1] = " ";
+        if move_to % 8 == 2 {
+            new_board[(move_to+1) as usize] = new_board[(move_to-2) as usize];
+            new_board[(move_to-2) as usize] = " ";
         }
         else {
-            new_board[move_to-1] = new_board[move_to+1];
-            new_board[move_to+1] = " ";
+            new_board[(move_to-1) as usize] = new_board[(move_to+1) as usize];
+            new_board[(move_to+1) as usize] = " ";
         }
-        new_board[move_to] = new_board[move_from];
-        new_board[move_from] = " ";
+        new_board[move_to as usize] = new_board[move_from as usize];
+        new_board[move_from as usize] = " ";
         new_board
     }
     else {
         let mut new_board = board.clone();
-        new_board[move_to] = new_board[move_from];
-        new_board[move_from] = " ";
+        new_board[move_to as usize] = new_board[move_from as usize];
+        new_board[move_from as usize] = " ";
         new_board
     }
 }
