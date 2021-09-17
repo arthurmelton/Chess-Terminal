@@ -439,11 +439,11 @@ fn is_move_valid(move_from: i32, move_to: i32, board: Vec<&str>, can_castle: Vec
             if ((move_to == move_from + 8
                 || move_to == move_from - 8
                 || (move_to == move_from - 1
-                    && (move_to as f32 / 8 as f32).floor()
-                        == (move_from as f32 / 8 as f32).floor())
+                    && (move_to as f32 / 8_f32).floor()
+                        == (move_from as f32 / 8_f32).floor())
                 || move_to == move_from + 1
-                    && (move_to as f32 / 8 as f32).floor()
-                        == (move_from as f32 / 8 as f32).floor())
+                    && (move_to as f32 / 8_f32).floor()
+                        == (move_from as f32 / 8_f32).floor())
                 && (get_color(move_from, board.clone()) != get_color(move_to, board.clone())))
                 || (get_color(move_from, board.clone()) == "White"
                     && (move_to == 58 || move_to == 62)
